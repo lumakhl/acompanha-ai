@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.content.Intent;
 import android.nfc.Tag;
 import android.os.Bundle;
 
@@ -28,6 +29,7 @@ import android.widget.Toast;
 import com.ai.acompanha.acompanhaai.R;
 import com.ai.acompanha.acompanhaai.ui.login.LoginViewModel;
 import com.ai.acompanha.acompanhaai.ui.login.LoginViewModelFactory;
+import com.ai.acompanha.acompanhaai.ui.main.MainActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -49,51 +51,15 @@ public class LoginActivity extends AppCompatActivity {
         loginViewModel = ViewModelProviders.of(this, new LoginViewModelFactory())
                 .get(LoginViewModel.class);
 
-
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
 
         final EditText usernameEditText = findViewById(R.id.username);
         final EditText passwordEditText = findViewById(R.id.password);
-        final Button loginButton = findViewById(R.id.login);
+        final Button loginButton = findViewById(R.id.btn_login);
         //final ProgressBar loadingProgressBar = findViewById(R.id.loading);
         final TextView registrar = findViewById(R.id.txtRegistrar);
 
-        loginViewModel.getLoginFormState().observe(this, new Observer<LoginFormState>() {
-            @Override
-            public void onChanged(@Nullable LoginFormState loginFormState) {
-                if (loginFormState == null) {
-                    return;
-                }
-                loginButton.setEnabled(loginFormState.isDataValid());
-                if (loginFormState.getUsernameError() != null) {
-                    usernameEditText.setError(getString(loginFormState.getUsernameError()));
-                }
-                if (loginFormState.getPasswordError() != null) {
-                    passwordEditText.setError(getString(loginFormState.getPasswordError()));
-                }
-            }
-        });
-
-        loginViewModel.getLoginResult().observe(this, new Observer<LoginResult>() {
-            @Override
-            public void onChanged(@Nullable LoginResult loginResult) {
-                if (loginResult == null) {
-                    return;
-                }
-                //    loadingProgressBar.setVisibility(View.GONE);
-                if (loginResult.getError() != null) {
-                    showLoginFailed(loginResult.getError());
-                }
-                if (loginResult.getSuccess() != null) {
-                    updateUiWithUser(loginResult.getSuccess());
-                }
-                setResult(Activity.RESULT_OK);
-
-                //Complete and destroy login activity once successful
-                finish();
-            }
-        });
 
         TextWatcher afterTextChangedListener = new TextWatcher() {
             @Override
@@ -108,8 +74,8 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                login(usernameEditText.getText().toString(),
-                        passwordEditText.getText().toString());
+               // login(usernameEditText.getText().toString(),
+               //         passwordEditText.getText().toString());
             }
         };
         usernameEditText.addTextChangedListener(afterTextChangedListener);
@@ -119,8 +85,8 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    loginViewModel.login(usernameEditText.getText().toString(),
-                            passwordEditText.getText().toString());
+                    login(usernameEditText.getText().toString(),
+                                     passwordEditText.getText().toString());
                 }
                 return false;
             }
@@ -129,6 +95,8 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                System.out.println("esta passando aqui");
+                Toast.makeText(LoginActivity.this, "PASSOU AQUI", Toast.LENGTH_SHORT).show();
                 //  loadingProgressBar.setVisibility(View.VISIBLE);
                 //  loginViewModel.login(usernameEditText.getText().toString(),
                 //          passwordEditText.getText().toString());
@@ -155,6 +123,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     // Sign in sucess
                     Toast.makeText(LoginActivity.this, "Usuario criado com sucesso", Toast.LENGTH_SHORT).show();
+                    updateUiWithUser();
 
 
                 } else {
@@ -167,6 +136,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void login(String username, String password) {
+        Toast.makeText(this, "PASSOU AQUI", Toast.LENGTH_SHORT).show();
         mAuth.signInWithEmailAndPassword(username, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -177,7 +147,7 @@ public class LoginActivity extends AppCompatActivity {
                             FirebaseUser user = mAuth.getCurrentUser();
                             Toast.makeText(LoginActivity.this, "Você conseguiu logar parabéns",
                                     Toast.LENGTH_SHORT).show();
-                            // updateUI(user);
+                            updateUiWithUser();
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
@@ -189,6 +159,7 @@ public class LoginActivity extends AppCompatActivity {
                         // ...
                     }
                 });
+
 
     }
 
@@ -202,10 +173,13 @@ public class LoginActivity extends AppCompatActivity {
         // updateUiWithUser(currentUser);
     }
 
-    private void updateUiWithUser(LoggedInUserView model) {
-        String welcome = getString(R.string.welcome) + model.getDisplayName();
+    private void updateUiWithUser() {
+
         // TODO : initiate successful logged in experience
-        Toast.makeText(getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        finish();
+
     }
 
     private void showLoginFailed(@StringRes Integer errorString) {
