@@ -1,14 +1,16 @@
 package com.ai.acompanha.acompanhaai.ui.main;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 
 import com.ai.acompanha.acompanhaai.R;
+import com.ai.acompanha.acompanhaai.service.ProcessImageService;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
 import android.provider.MediaStore;
 import android.view.View;
@@ -35,8 +37,10 @@ public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration mAppBarConfiguration;
 
 
-    static final int REQUEST_IMAGE_CAPTURE = 1;
-    private static final int MY_CAMERA_REQUEST_CODE = 100;
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
+    private static final int CAMERA_REQUEST_CODE = 100;
+
+    private ProcessImageService imageService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +50,8 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         FloatingActionButton fab = findViewById(R.id.fab);
 
+       imageService = imageService.getInstance();
+
         fab.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
@@ -54,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
                 if (checkSelfPermission(Manifest.permission.CAMERA)
                         != PackageManager.PERMISSION_GRANTED) {
                     requestPermissions(new String[]{Manifest.permission.CAMERA},
-                            MY_CAMERA_REQUEST_CODE);
+                            CAMERA_REQUEST_CODE);
                 } else {
                     dispatchTakePictureIntent();
                 }
@@ -101,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
 
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        if (requestCode == MY_CAMERA_REQUEST_CODE) {
+        if (requestCode == CAMERA_REQUEST_CODE) {
 
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 dispatchTakePictureIntent();
@@ -111,6 +117,17 @@ public class MainActivity extends AppCompatActivity {
 
             }
 
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK)
+        {
+            Bitmap photo = (Bitmap) data.getExtras().get("data");
+
+            imageService.process(photo, this);
         }
     }
 }
