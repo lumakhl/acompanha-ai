@@ -95,8 +95,6 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("esta passando aqui");
-                Toast.makeText(LoginActivity.this, "PASSOU AQUI", Toast.LENGTH_SHORT).show();
                 //  loadingProgressBar.setVisibility(View.VISIBLE);
                 //  loginViewModel.login(usernameEditText.getText().toString(),
                 //          passwordEditText.getText().toString());
@@ -136,7 +134,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void login(String username, String password) {
-        Toast.makeText(this, "PASSOU AQUI", Toast.LENGTH_SHORT).show();
         mAuth.signInWithEmailAndPassword(username, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
