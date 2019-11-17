@@ -5,12 +5,12 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.hardware.Camera;
 import android.os.Build;
 import android.os.Bundle;
 
 import com.ai.acompanha.acompanhaai.R;
 import com.ai.acompanha.acompanhaai.service.ProcessImageService;
+import com.ai.acompanha.acompanhaai.ui.dialog.FecharDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import android.provider.MediaStore;
@@ -30,7 +30,10 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import androidx.appcompat.widget.Toolbar;
 
+import androidx.fragment.app.DialogFragment;
+
 import android.view.Menu;
+import android.widget.Button;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
@@ -50,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         FloatingActionButton fab = findViewById(R.id.fab);
+        Button btnFechar = findViewById(R.id.btnFechar);
 
         imageService = imageService.getInstance();
 
@@ -65,6 +69,15 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     dispatchTakePictureIntent();
                 }
+
+            }
+        });
+
+        btnFechar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DialogFragment fecharDialog = new FecharDialog();
+                fecharDialog.show(getSupportFragmentManager(), "FecharDialogFragment");
 
             }
         });

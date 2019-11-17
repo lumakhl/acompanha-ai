@@ -21,6 +21,11 @@
     <string name="nav_header_title">Android Studio</string>
     <string name="nav_header_subtitle">android.studio.com</string>
     <string name="fragment_consumo">Consumo</string>
-    <string name="fragment_valor">Valor</string>
+    <string name="fragment_valor">Valor estimado</string>
     <string name="close">Fechar</string>
+    <string name="salvar">Salvar</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="valor_real">Valor da conta</string>
+    <string name="periodo">Período</string>
+    <string name="fechar_titulo">Você deseja fechar o período?</string>
 </resources>
