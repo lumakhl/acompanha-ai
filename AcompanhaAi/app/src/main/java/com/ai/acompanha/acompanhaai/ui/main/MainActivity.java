@@ -14,6 +14,7 @@ import com.ai.acompanha.acompanhaai.ui.dialog.FecharDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import android.provider.MediaStore;
+import android.view.MenuItem;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -93,6 +94,33 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
+        mAppBarConfiguration.getDrawerLayout().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getApplicationContext(), "Item menu", Toast.LENGTH_LONG).show();
+            }
+        });
+        drawer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getApplicationContext(), "Item menu", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        navigationView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getApplicationContext(), "Item menu", Toast.LENGTH_LONG).show();
+            }
+        });
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                Toast.makeText(getApplicationContext(), "Clicou aqui", Toast.LENGTH_LONG).show();
+                return false;
+            }
+        });
     }
 
     @Override
@@ -142,5 +170,12 @@ public class MainActivity extends AppCompatActivity {
 
             imageService.process(photo, this);
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+      //  Toast.makeText(getApplicationContext(), "Item menu", Toast.LENGTH_LONG).show();
+        return super.onOptionsItemSelected(item);
     }
 }
