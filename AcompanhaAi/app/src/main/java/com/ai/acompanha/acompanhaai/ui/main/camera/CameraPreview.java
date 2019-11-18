@@ -8,7 +8,6 @@ import android.view.SurfaceView;
 
 import java.io.IOException;
 
-/** A basic Camera preview class */
 public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback {
     private SurfaceHolder mHolder;
     private Camera mCamera;
@@ -17,8 +16,6 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         super(context);
         mCamera = camera;
 
-        // Install a SurfaceHolder.Callback so we get notified when the
-        // underlying surface is created and destroyed.
         mHolder = getHolder();
         mHolder.addCallback(this);
         // deprecated setting, but required on Android versions prior to 3.0
@@ -26,7 +23,6 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     }
 
     public void surfaceCreated(SurfaceHolder holder) {
-        // The Surface has been created, now tell the camera where to draw the preview.
         try {
             mCamera.setPreviewDisplay(holder);
             mCamera.startPreview();

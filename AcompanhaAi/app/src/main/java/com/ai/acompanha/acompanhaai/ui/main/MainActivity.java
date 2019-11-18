@@ -11,9 +11,9 @@ import android.os.Bundle;
 import com.ai.acompanha.acompanhaai.R;
 import com.ai.acompanha.acompanhaai.service.ProcessImageService;
 import com.ai.acompanha.acompanhaai.ui.dialog.FecharDialog;
+import com.ai.acompanha.acompanhaai.ui.main.camera.CameraActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import android.provider.MediaStore;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -64,10 +64,9 @@ public class MainActivity extends AppCompatActivity {
 
                 if (checkSelfPermission(Manifest.permission.CAMERA)
                         != PackageManager.PERMISSION_GRANTED) {
-                    requestPermissions(new String[]{Manifest.permission.CAMERA},
-                            CAMERA_REQUEST_CODE);
+                    requestPermissions(new String[]{Manifest.permission.CAMERA}, CAMERA_REQUEST_CODE);
                 } else {
-                    dispatchTakePictureIntent();
+                    callCameraActivity();
                 }
 
             }
@@ -109,14 +108,6 @@ public class MainActivity extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
-    private void dispatchTakePictureIntent() {
-
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-        }
-    }
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 
@@ -124,12 +115,8 @@ public class MainActivity extends AppCompatActivity {
 
         if (requestCode == CAMERA_REQUEST_CODE) {
 
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                dispatchTakePictureIntent();
-
-            } else {
-                Toast.makeText(this, "É preciso permitir o uso da camera para continuar", Toast.LENGTH_LONG).show();
-
+            if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "É preciso permitir o uso da camera para continuar.", Toast.LENGTH_LONG).show();
             }
 
         }
@@ -143,4 +130,10 @@ public class MainActivity extends AppCompatActivity {
             imageService.process(photo, this);
         }
     }
+
+    private void callCameraActivity() {
+        Intent intent = new Intent(this, CameraActivity.class);
+        startActivity(intent);
+    }
+
 }
