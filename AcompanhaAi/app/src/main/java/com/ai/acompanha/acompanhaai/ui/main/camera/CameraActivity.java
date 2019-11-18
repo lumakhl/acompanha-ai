@@ -3,7 +3,6 @@ package com.ai.acompanha.acompanhaai.ui.main.camera;
 import android.app.Activity;
 import android.hardware.Camera;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.FrameLayout;
 
 import com.ai.acompanha.acompanhaai.R;
