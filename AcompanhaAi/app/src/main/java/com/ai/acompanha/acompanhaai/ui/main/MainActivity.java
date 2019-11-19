@@ -1,6 +1,7 @@
 package com.ai.acompanha.acompanhaai.ui.main;
 
 import android.Manifest;
+import android.animation.Animator;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -11,6 +12,10 @@ import android.os.Bundle;
 import com.ai.acompanha.acompanhaai.R;
 import com.ai.acompanha.acompanhaai.service.ProcessImageService;
 import com.ai.acompanha.acompanhaai.ui.dialog.FecharDialog;
+import com.ai.acompanha.acompanhaai.ui.main.gallery.GalleryFragment;
+import com.ai.acompanha.acompanhaai.ui.main.home.HomeFragment;
+import com.ai.acompanha.acompanhaai.ui.main.slideshow.SlideshowFragment;
+import com.ai.acompanha.acompanhaai.ui.main.tools.ToolsFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import android.provider.MediaStore;
@@ -20,6 +25,9 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -40,6 +48,8 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
+    private FloatingActionButton fab;
+    Button btnFechar;
 
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
@@ -53,8 +63,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        FloatingActionButton fab = findViewById(R.id.fab);
-        Button btnFechar = findViewById(R.id.btnFechar);
+        fab = findViewById(R.id.fab);
+        btnFechar = findViewById(R.id.btnFechar);
 
         imageService = imageService.getInstance();
 
@@ -82,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        final DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -117,8 +127,30 @@ public class MainActivity extends AppCompatActivity {
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                Toast.makeText(getApplicationContext(), "Clicou aqui", Toast.LENGTH_LONG).show();
-                return false;
+                Fragment fragment = null;
+                switch (menuItem.getItemId()) {
+                    case (R.id.nav_gallery):
+                        fragment = new GalleryFragment();
+                        showButtons(false);
+                        break;
+                    case (R.id.nav_slideshow):
+                        fragment = new SlideshowFragment();
+                        showButtons(false);
+                        break;
+                    case (R.id.nav_tools):
+                        fragment = new ToolsFragment();
+                        showButtons(false);
+                        break;
+                    default:
+                        fragment = new HomeFragment();
+                        showButtons(true);
+                        break;
+                }
+
+                FragmentManager fM = getSupportFragmentManager();
+                fM.beginTransaction().replace(R.id.content_main, fragment).commit();
+                drawer.closeDrawers();
+                return true;
             }
         });
     }
@@ -174,8 +206,17 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-
-      //  Toast.makeText(getApplicationContext(), "Item menu", Toast.LENGTH_LONG).show();
+        //  Toast.makeText(getApplicationContext(), "Item menu", Toast.LENGTH_LONG).show();
         return super.onOptionsItemSelected(item);
+    }
+
+    private void showButtons(boolean visible) {
+        if (visible) {
+            btnFechar.setVisibility(View.VISIBLE);
+            fab.show();
+        } else {
+            btnFechar.setVisibility(View.GONE);
+            fab.hide();
+        }
     }
 }
