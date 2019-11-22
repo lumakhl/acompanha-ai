@@ -44,7 +44,7 @@
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="50dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/txtConsumo"
+                app:layout_constraintEnd_toStartOf="@+id/txtConsumoCV"
                 app:layout_constraintHorizontal_bias="0.019"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -62,7 +62,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/txtConsumo"
+                android:id="@+id/txtConsumoCV"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="56dp"

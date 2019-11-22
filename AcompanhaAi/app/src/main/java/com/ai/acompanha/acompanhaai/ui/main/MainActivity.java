@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        final Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         fab = findViewById(R.id.fab);
         btnFechar = findViewById(R.id.btnFechar);
@@ -132,18 +132,22 @@ public class MainActivity extends AppCompatActivity {
                     case (R.id.nav_gallery):
                         fragment = new GalleryFragment();
                         showButtons(false);
+                        toolbar.setTitle(R.string.histo);
                         break;
                     case (R.id.nav_slideshow):
                         fragment = new SlideshowFragment();
                         showButtons(false);
+                        toolbar.setTitle(R.string.prev);
                         break;
                     case (R.id.nav_tools):
                         fragment = new ToolsFragment();
                         showButtons(false);
+                        toolbar.setTitle(R.string.config);
                         break;
                     default:
                         fragment = new HomeFragment();
                         showButtons(true);
+                        toolbar.setTitle(R.string.home);
                         break;
                 }
 

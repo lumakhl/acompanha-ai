@@ -28,4 +28,11 @@
     <string name="valor_real">Valor da conta</string>
     <string name="periodo">Período</string>
     <string name="fechar_titulo">Você deseja fechar o período?</string>
+
+
+    <!-- Titulos-->
+    <string name="home">Home</string>
+    <string name="histo">Histórico</string>
+    <string name="prev">Previsão</string>
+    <string name="config">Configurações</string>
 </resources>
