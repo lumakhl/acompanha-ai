@@ -11,6 +11,7 @@ import android.os.Bundle;
 
 import com.ai.acompanha.acompanhaai.R;
 import com.ai.acompanha.acompanhaai.service.ProcessImageService;
+import com.ai.acompanha.acompanhaai.ui.dialog.ConsumoInicialDialog;
 import com.ai.acompanha.acompanhaai.ui.dialog.FecharDialog;
 import com.ai.acompanha.acompanhaai.ui.main.gallery.GalleryFragment;
 import com.ai.acompanha.acompanhaai.ui.main.home.HomeFragment;
@@ -92,6 +93,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
         final DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
@@ -105,25 +107,6 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
-        mAppBarConfiguration.getDrawerLayout().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(getApplicationContext(), "Item menu", Toast.LENGTH_LONG).show();
-            }
-        });
-        drawer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(getApplicationContext(), "Item menu", Toast.LENGTH_LONG).show();
-            }
-        });
-
-        navigationView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(getApplicationContext(), "Item menu", Toast.LENGTH_LONG).show();
-            }
-        });
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -157,6 +140,8 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+
+        inflarDialogConsumoinicial();
     }
 
     @Override
@@ -210,7 +195,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        //  Toast.makeText(getApplicationContext(), "Item menu", Toast.LENGTH_LONG).show();
         return super.onOptionsItemSelected(item);
     }
 
@@ -222,5 +206,10 @@ public class MainActivity extends AppCompatActivity {
             btnFechar.setVisibility(View.GONE);
             fab.hide();
         }
+    }
+
+    private void inflarDialogConsumoinicial() {
+        DialogFragment consumoInicialDialog = new ConsumoInicialDialog();
+        consumoInicialDialog.show(getSupportFragmentManager(), "ConsumoInicialDialogFragment");
     }
 }

@@ -13,6 +13,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.ai.acompanha.acompanhaai.R;
+import com.ai.acompanha.acompanhaai.data.shared.SharedUtils;
 
 public class HomeFragment extends Fragment {
 
@@ -24,12 +25,19 @@ public class HomeFragment extends Fragment {
                 ViewModelProviders.of(this).get(HomeViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
         final TextView textView = (TextView) root.findViewById(R.id.text_home);
+        final TextView txtConsumo = root.findViewById(R.id.txtConsumo);
+        final TextView txtValor = root.findViewById(R.id.txtValorPrevisto);
         homeViewModel.getText().observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);
             }
         });
+
+        txtConsumo.setText(SharedUtils.getConsumo(getContext())+"m³");
+        txtValor.setText(String.format("R$%.02f",SharedUtils.getValor(getContext())));
+
+
         return root;
     }
 }

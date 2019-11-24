@@ -13,7 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
-public class FecharDialog extends DialogFragment {
+public class ConsumoInicialDialog extends DialogFragment {
 
     @NonNull
     @Override
@@ -21,20 +21,21 @@ public class FecharDialog extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         LayoutInflater inflater = requireActivity().getLayoutInflater();
-        builder.setView(inflater.inflate(R.layout.dialog_fechar, null));
+        builder.setView(inflater.inflate(R.layout.dialog_consumo_inicial, null));
 
-        builder.setTitle(R.string.fechar_titulo);
+        builder.setTitle(R.string.con_inic);
         builder.setPositiveButton(R.string.salvar, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                Toast.makeText(getActivity(), "Testte", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Teste", Toast.LENGTH_SHORT).show();
             }
         });
 
         builder.setNegativeButton(R.string.cancelar, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-
+                Toast.makeText(getActivity(), R.string.msg_cancel_inicial,
+                        Toast.LENGTH_SHORT).show();
             }
         });
 
