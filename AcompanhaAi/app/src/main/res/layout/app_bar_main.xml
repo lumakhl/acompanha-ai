@@ -2,9 +2,22 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/teste"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.main.MainActivity">
+
+    <Button
+        android:id="@+id/btnFechar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|start"
+        android:layout_margin="16dp"
+        android:background="@color/amareloOuro"
+        android:shadowColor="#2196F3"
+        android:text="@string/close"
+        android:textColor="@color/white"
+        android:textStyle="bold" />
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -29,17 +42,5 @@
         app:srcCompat="@drawable/camera" />
 
     <include layout="@layout/content_main" />
-
-    <Button
-        android:id="@+id/btnFechar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|start"
-        android:layout_margin="16dp"
-        android:background="@color/amareloOuro"
-        android:shadowColor="#2196F3"
-        android:text="@string/close"
-        android:textColor="@color/white"
-        android:textStyle="bold" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

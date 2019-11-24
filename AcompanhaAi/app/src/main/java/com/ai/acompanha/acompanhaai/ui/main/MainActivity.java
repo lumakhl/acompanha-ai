@@ -1,6 +1,7 @@
 package com.ai.acompanha.acompanhaai.ui.main;
 
 import android.Manifest;
+import android.animation.Animator;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -14,11 +15,22 @@ import com.ai.acompanha.acompanhaai.ui.dialog.FecharDialog;
 import com.ai.acompanha.acompanhaai.ui.main.camera.CameraActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import com.ai.acompanha.acompanhaai.ui.main.gallery.GalleryFragment;
+import com.ai.acompanha.acompanhaai.ui.main.home.HomeFragment;
+import com.ai.acompanha.acompanhaai.ui.main.slideshow.SlideshowFragment;
+import com.ai.acompanha.acompanhaai.ui.main.tools.ToolsFragment;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import android.provider.MediaStore;
+import android.view.MenuItem;
 import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -39,6 +51,8 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
+    private FloatingActionButton fab;
+    Button btnFechar;
 
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
@@ -50,10 +64,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        final Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        FloatingActionButton fab = findViewById(R.id.fab);
-        Button btnFechar = findViewById(R.id.btnFechar);
+        fab = findViewById(R.id.fab);
+        btnFechar = findViewById(R.id.btnFechar);
 
         imageService = imageService.getInstance();
 
@@ -73,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        final DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -85,6 +99,59 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
+        mAppBarConfiguration.getDrawerLayout().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getApplicationContext(), "Item menu", Toast.LENGTH_LONG).show();
+            }
+        });
+        drawer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getApplicationContext(), "Item menu", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        navigationView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getApplicationContext(), "Item menu", Toast.LENGTH_LONG).show();
+            }
+        });
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                Fragment fragment = null;
+                switch (menuItem.getItemId()) {
+                    case (R.id.nav_gallery):
+                        fragment = new GalleryFragment();
+                        showButtons(false);
+                        toolbar.setTitle(R.string.histo);
+                        break;
+                    case (R.id.nav_slideshow):
+                        fragment = new SlideshowFragment();
+                        showButtons(false);
+                        toolbar.setTitle(R.string.prev);
+                        break;
+                    case (R.id.nav_tools):
+                        fragment = new ToolsFragment();
+                        showButtons(false);
+                        toolbar.setTitle(R.string.config);
+                        break;
+                    default:
+                        fragment = new HomeFragment();
+                        showButtons(true);
+                        toolbar.setTitle(R.string.home);
+                        break;
+                }
+
+                FragmentManager fM = getSupportFragmentManager();
+                fM.beginTransaction().replace(R.id.content_main, fragment).commit();
+                drawer.closeDrawers();
+                return true;
+            }
+        });
     }
 
     @Override
@@ -129,4 +196,19 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        //  Toast.makeText(getApplicationContext(), "Item menu", Toast.LENGTH_LONG).show();
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void showButtons(boolean visible) {
+        if (visible) {
+            btnFechar.setVisibility(View.VISIBLE);
+            fab.show();
+        } else {
+            btnFechar.setVisibility(View.GONE);
+            fab.hide();
+        }
+    }
 }
