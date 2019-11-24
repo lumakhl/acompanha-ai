@@ -27,8 +27,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ai.acompanha.acompanhaai.R;
-import com.ai.acompanha.acompanhaai.ui.login.LoginViewModel;
-import com.ai.acompanha.acompanhaai.ui.login.LoginViewModelFactory;
 import com.ai.acompanha.acompanhaai.ui.main.MainActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -44,6 +42,8 @@ public class LoginActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
 
+    private ProgressBar loadingProgressBar;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,7 +57,7 @@ public class LoginActivity extends AppCompatActivity {
         final EditText usernameEditText = findViewById(R.id.username);
         final EditText passwordEditText = findViewById(R.id.password);
         final Button loginButton = findViewById(R.id.btn_login);
-        //final ProgressBar loadingProgressBar = findViewById(R.id.loading);
+        loadingProgressBar = findViewById(R.id.progressBar);
         final TextView registrar = findViewById(R.id.txtRegistrar);
 
 
@@ -85,6 +85,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    loadingProgressBar.setVisibility(View.VISIBLE);
                     login(usernameEditText.getText().toString(),
                                      passwordEditText.getText().toString());
                 }
@@ -95,9 +96,7 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //  loadingProgressBar.setVisibility(View.VISIBLE);
-                //  loginViewModel.login(usernameEditText.getText().toString(),
-                //          passwordEditText.getText().toString());
+                loadingProgressBar.setVisibility(View.VISIBLE);
                 login(usernameEditText.getText().toString(),
                         passwordEditText.getText().toString());
             }
@@ -106,6 +105,7 @@ public class LoginActivity extends AppCompatActivity {
         registrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                loadingProgressBar.setVisibility(View.VISIBLE);
                 criarUsuario(usernameEditText.getText().toString(), passwordEditText.getText().toString());
 
 
@@ -120,17 +120,21 @@ public class LoginActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
                     // Sign in sucess
-                    Toast.makeText(LoginActivity.this, "Usuario criado com sucesso", Toast.LENGTH_SHORT).show();
+                    loadingProgressBar.setVisibility(View.INVISIBLE);
+                    Toast.makeText(LoginActivity.this, "Usuário criado com sucesso", Toast.LENGTH_SHORT).show();
                     updateUiWithUser();
 
 
                 } else {
-                    Toast.makeText(LoginActivity.this, "Authentication failed.",
+                    loadingProgressBar.setVisibility(View.INVISIBLE);
+                    Toast.makeText(LoginActivity.this, "Não foi possível criar um novo usuário",
                             Toast.LENGTH_SHORT).show();
                 }
 
             }
         });
+
+        loadingProgressBar.setVisibility(View.VISIBLE);
     }
 
     private void login(String username, String password) {
@@ -140,20 +144,18 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
+                            loadingProgressBar.setVisibility(View.INVISIBLE);
                             Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            Toast.makeText(LoginActivity.this, "Você conseguiu logar parabéns",
-                                    Toast.LENGTH_SHORT).show();
                             updateUiWithUser();
                         } else {
-                            // If sign in fails, display a message to the user.
+                            loadingProgressBar.setVisibility(View.INVISIBLE);
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
-                            Toast.makeText(LoginActivity.this, "Errou a senha trouxa",
+                            Toast.makeText(LoginActivity.this, "Usuário ou senha incorretos",
                                     Toast.LENGTH_SHORT).show();
                             //  updateUI(null);
                         }
 
-                        // ...
                     }
                 });
 
