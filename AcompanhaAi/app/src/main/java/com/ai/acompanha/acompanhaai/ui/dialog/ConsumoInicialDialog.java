@@ -5,9 +5,12 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.ai.acompanha.acompanhaai.R;
+import com.ai.acompanha.acompanhaai.data.shared.SharedUtils;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,13 +24,15 @@ public class ConsumoInicialDialog extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         LayoutInflater inflater = requireActivity().getLayoutInflater();
-        builder.setView(inflater.inflate(R.layout.dialog_consumo_inicial, null));
+        final View content =  inflater.inflate(R.layout.dialog_consumo_inicial, null);
+        builder.setView(content);
 
+        final EditText consumoInicial = content.findViewById(R.id.txt_consumo_inicial);
         builder.setTitle(R.string.con_inic);
         builder.setPositiveButton(R.string.salvar, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                Toast.makeText(getActivity(), "Teste", Toast.LENGTH_SHORT).show();
+                SharedUtils.setConsumoAnterior(getContext(),Integer.parseInt(consumoInicial.getText().toString()));
             }
         });
 

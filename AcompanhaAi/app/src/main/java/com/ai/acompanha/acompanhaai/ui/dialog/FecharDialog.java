@@ -18,7 +18,6 @@ import com.ai.acompanha.acompanhaai.data.model.Registro;
 import com.ai.acompanha.acompanhaai.data.shared.SharedUtils;
 
 import java.util.Calendar;
-import java.util.Date;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;

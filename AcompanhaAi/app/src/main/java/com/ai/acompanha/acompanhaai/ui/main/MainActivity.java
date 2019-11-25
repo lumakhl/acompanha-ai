@@ -141,7 +141,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        inflarDialogConsumoinicial();
     }
 
     @Override
@@ -206,10 +205,5 @@ public class MainActivity extends AppCompatActivity {
             btnFechar.setVisibility(View.GONE);
             fab.hide();
         }
-    }
-
-    private void inflarDialogConsumoinicial() {
-        DialogFragment consumoInicialDialog = new ConsumoInicialDialog();
-        consumoInicialDialog.show(getSupportFragmentManager(), "ConsumoInicialDialogFragment");
     }
 }

@@ -28,6 +28,7 @@
     <string name="valor_real">Valor da conta</string>
     <string name="periodo">Período</string>
     <string name="fechar_titulo">Você deseja fechar o período?</string>
+    <string name="calcular">Calcular</string>
 
 
     <!-- Titulos-->
@@ -47,4 +48,8 @@
     <string name="msg_historico">
         Ainda não existem dados para serem exibidos
     </string>
+    <string name="msg_consumo">
+          M³ do registro de sua conta
+    </string>
+    <string name="msg_consumo_vazio">É necessário informar um novo valor para calcular</string>
 </resources>
