@@ -44,4 +44,7 @@
     <string name="msg_cancel_inicial">
         É necessário valor inicial para iniciar os cálculos
     </string>
+    <string name="msg_historico">
+        Ainda não existem dados para serem exibidos
+    </string>
 </resources>

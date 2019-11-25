@@ -28,7 +28,7 @@ public class RegistroAdapter extends RecyclerView.Adapter<RegistroAdapter.Regist
         public RegistroViewHolder(View itemView) {
             super(itemView);
             cv = itemView.findViewById(R.id.cv_registros);
-            consumo = itemView.findViewById(R.id.txtPeriodoCV);
+            consumo = itemView.findViewById(R.id.txtConsumoCV);
             valorEstimado = itemView.findViewById(R.id.txtValorEstimadoCV);
             valorReal = itemView.findViewById(R.id.txtValorRealCV);
             periodo = itemView.findViewById(R.id.txtPeriodoCV);
@@ -52,10 +52,10 @@ public class RegistroAdapter extends RecyclerView.Adapter<RegistroAdapter.Regist
 
     @Override
     public void onBindViewHolder(@NonNull RegistroViewHolder holder, int i) {
-        holder.consumo.setText(String.valueOf(registros.get(i).getConsumo()));
-        holder.valorReal.setText(String.valueOf(registros.get(i).getValorReal()));
-        holder.valorEstimado.setText(String.valueOf(registros.get(i).getValorPrevisto()));
-        holder.periodo.setText(registros.get(i).getPeriodo().toString());
+        holder.consumo.setText(String.format("%dm³",registros.get(i).getConsumo()));
+        holder.valorReal.setText(String.format("R$%.02f",registros.get(i).getValorReal()));
+        holder.valorEstimado.setText(String.format("R$%.02f",registros.get(i).getValorPrevisto()));
+        holder.periodo.setText(registros.get(i).getPeriodo());
     }
 
 

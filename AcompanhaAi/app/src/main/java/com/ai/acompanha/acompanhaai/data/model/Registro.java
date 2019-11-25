@@ -1,5 +1,6 @@
 package com.ai.acompanha.acompanhaai.data.model;
 
+import java.util.Calendar;
 import java.util.Date;
 
 public class Registro {
@@ -8,9 +9,9 @@ public class Registro {
     private int consumo;
     private double valorPrevisto;
     private double valorReal;
-    private Date periodo;
+    private String periodo;
 
-    public Registro(long id, int consumo, double valorPrevisto, double valorReal, Date periodo) {
+    public Registro(long id, int consumo, double valorPrevisto, double valorReal, String periodo) {
         this.id = id;
         this.consumo = consumo;
         this.valorPrevisto = valorPrevisto;
@@ -18,7 +19,7 @@ public class Registro {
         this.periodo = periodo;
     }
 
-    public Registro(int consumo, double valorPrevisto, double valorReal, Date periodo) {
+    public Registro(int consumo, double valorPrevisto, double valorReal, String periodo) {
         this.consumo = consumo;
         this.valorPrevisto = valorPrevisto;
         this.valorReal = valorReal;
@@ -26,6 +27,7 @@ public class Registro {
     }
 
     public Registro() {
+
     }
 
     public long getId() {
@@ -60,11 +62,11 @@ public class Registro {
         this.valorReal = valorReal;
     }
 
-    public Date getPeriodo() {
+    public String getPeriodo() {
         return periodo;
     }
 
-    public void setPeriodo(Date periodo) {
+    public void setPeriodo(String periodo) {
         this.periodo = periodo;
     }
 }

@@ -53,7 +53,7 @@ public class RegistroRepository {
                 RegistroContract.RegistroEntry.COLUMN_PERIODO
         };
 
-        String sortOrder = RegistroContract.RegistroEntry.COLUMN_PERIODO + "DESC";
+        String sortOrder = RegistroContract.RegistroEntry.COLUMN_PERIODO + " DESC";
 
         Cursor cursor = db.query(
                 RegistroContract.RegistroEntry.TABLE_NAME,   // The table to query
@@ -74,7 +74,7 @@ public class RegistroRepository {
             double valorReal = cursor.getDouble(cursor.getColumnIndexOrThrow(RegistroContract.RegistroEntry.COLUMN_VALOR_REAL));
             String periodo = cursor.getString(cursor.getColumnIndexOrThrow(RegistroContract.RegistroEntry.COLUMN_PERIODO));
 
-            registros.add(new Registro(registroID, consumo, valorEstimado, valorReal, new Date(periodo)));
+            registros.add(new Registro(registroID, consumo, valorEstimado, valorReal, periodo));
         }
 
         cursor.close();
