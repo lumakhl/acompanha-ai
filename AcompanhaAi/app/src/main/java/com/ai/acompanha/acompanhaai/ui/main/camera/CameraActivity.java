@@ -217,19 +217,14 @@ public class CameraActivity extends AppCompatActivity {
     private CameraCaptureSession.CaptureCallback mPreviewCaptureCallback = new
         CameraCaptureSession.CaptureCallback() {
             private void process(CaptureResult captureResult) {
-                switch (mCaptureState) {
-                    case STATE_PREVIEW:
-                        // Do nothing
-                        break;
-                    case STATE_WAIT_LOCK:
-                        mCaptureState = STATE_PREVIEW;
-                        Integer afState = captureResult.get(CaptureResult.CONTROL_AF_STATE);
-                        if(afState == CaptureResult.CONTROL_AF_STATE_FOCUSED_LOCKED ||
-                                afState == CaptureResult.CONTROL_AF_STATE_NOT_FOCUSED_LOCKED) {
-                            Toast.makeText(getApplicationContext(), "AF Locked!", Toast.LENGTH_SHORT).show();
-                            startStillCaptureRequest();
-                        }
-                        break;
+                if (mCaptureState == STATE_WAIT_LOCK) {
+                    mCaptureState = STATE_PREVIEW;
+                    Integer afState = captureResult.get(CaptureResult.CONTROL_AF_STATE);
+                    if(afState == CaptureResult.CONTROL_AF_STATE_FOCUSED_LOCKED ||
+                            afState == CaptureResult.CONTROL_AF_STATE_NOT_FOCUSED_LOCKED) {
+                        Toast.makeText(getApplicationContext(), "Imagem capturada com sucesso.", Toast.LENGTH_SHORT).show();
+                        startStillCaptureRequest();
+                    }
                 }
             }
 
@@ -294,16 +289,16 @@ public class CameraActivity extends AppCompatActivity {
         if(requestCode == REQUEST_CAMERA_PERMISSION_RESULT) {
             if(grantResults[0] != PackageManager.PERMISSION_GRANTED) {
                 Toast.makeText(getApplicationContext(),
-                        "Application will not run without camera services", Toast.LENGTH_SHORT).show();
+                        "É necessário conceder a permissão para continuar.", Toast.LENGTH_SHORT).show();
             }
         }
         if(requestCode == REQUEST_WRITE_EXTERNAL_STORAGE_PERMISSION_RESULT) {
             if(grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Toast.makeText(this,
-                        "Permission successfully granted!", Toast.LENGTH_SHORT).show();
+                        "Permissão concedida com sucesso.", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(this,
-                        "App needs to save video to run", Toast.LENGTH_SHORT).show();
+                        "É necessário conceder a permissão para continuar.", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -374,7 +369,7 @@ public class CameraActivity extends AppCompatActivity {
                 } else {
                     if(shouldShowRequestPermissionRationale(android.Manifest.permission.CAMERA)) {
                         Toast.makeText(this,
-                                "Video app required access to camera", Toast.LENGTH_SHORT).show();
+                                "O aplicativo requer acesso à camera.", Toast.LENGTH_SHORT).show();
                     }
                     requestPermissions(new String[] {android.Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO
                     }, REQUEST_CAMERA_PERMISSION_RESULT);
@@ -401,7 +396,6 @@ public class CameraActivity extends AppCompatActivity {
                 new CameraCaptureSession.StateCallback() {
                     @Override
                     public void onConfigured(CameraCaptureSession session) {
-                        Log.d(TAG, "onConfigured: startPreview");
                         mPreviewCaptureSession = session;
                         try {
                             mPreviewCaptureSession.setRepeatingRequest(mCaptureRequestBuilder.build(),
@@ -412,10 +406,8 @@ public class CameraActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onConfigureFailed(CameraCaptureSession session) {
-                        Log.d(TAG, "onConfigureFailed: startPreview");
+                    public void onConfigureFailed(CameraCaptureSession session) { }
 
-                    }
                 }, null);
         } catch (CameraAccessException e) {
             e.printStackTrace();
