@@ -10,7 +10,7 @@ public class SharedUtils {
     private static final String CONSUMO = "consumo";
     private static final String VALOR = "valor";
 
-    public void setConsumoAnterior(Context context, int consumo) {
+    public static void setConsumoAnterior(Context context, int consumo) {
         SharedPreferences sp = context.getSharedPreferences(KEY, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
 
@@ -18,12 +18,12 @@ public class SharedUtils {
         editor.commit();
     }
 
-    public int getConsumoAnterior(Context context) {
+    public static int getConsumoAnterior(Context context) {
         SharedPreferences sp = context.getSharedPreferences(KEY, Context.MODE_PRIVATE);
         return sp.getInt(CONSUMO_ANTERIOR, 0);
     }
 
-    public void setConsumo(Context context, int consumo) {
+    public static void setConsumo(Context context, int consumo) {
         SharedPreferences sp = context.getSharedPreferences(KEY, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
 
@@ -31,12 +31,12 @@ public class SharedUtils {
         editor.commit();
     }
 
-    public int getConsumo(Context context) {
+    public static int getConsumo(Context context) {
         SharedPreferences sp = context.getSharedPreferences(KEY, Context.MODE_PRIVATE);
         return sp.getInt(CONSUMO, 0);
     }
 
-    public void setValor(Context context, float valor) {
+    public static void setValor(Context context, float valor) {
         SharedPreferences sp = context.getSharedPreferences(KEY, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
 
@@ -44,7 +44,7 @@ public class SharedUtils {
         editor.commit();
     }
 
-    public float getValor(Context context) {
+    public static float getValor(Context context) {
         SharedPreferences sp = context.getSharedPreferences(KEY, Context.MODE_PRIVATE);
         return sp.getFloat(VALOR, 0);
     }

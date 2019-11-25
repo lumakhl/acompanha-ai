@@ -2,22 +2,22 @@ package com.ai.acompanha.acompanhaai.service;
 
 public class BlumenauCalculoService implements ICalculaService {
 
-    private BlumenauCalculoService instance;
+    private static BlumenauCalculoService instance;
 
     private BlumenauCalculoService() {
     }
 
-    private BlumenauCalculoService getInstance() {
+    public static BlumenauCalculoService getInstance() {
         if (instance == null)
             instance = new BlumenauCalculoService();
         return instance;
     }
 
     @Override
-    public double calcularValor(int anterior, int atual) {
+    public float calcularValor(int anterior, int atual) {
         int consumo = calculaConsumo(anterior, atual);
 
-        double valor = ValoresBlumenauEnum.A.getValor();
+        float valor = ValoresBlumenauEnum.A.getValor();
 
         if (consumo > 10) {
             consumo = consumo - 10;

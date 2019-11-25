@@ -4,17 +4,16 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ai.acompanha.acompanhaai.R;
+import com.ai.acompanha.acompanhaai.data.RegistroRepository;
 import com.ai.acompanha.acompanhaai.data.model.Registro;
 
 import java.util.ArrayList;
@@ -43,6 +42,10 @@ public class GalleryFragment extends Fragment {
         mAdapter = new RegistroAdapter(getRegistros());
         recyclerView.setAdapter(mAdapter);
 
+        if (mAdapter.getItemCount() == 0){
+            Toast.makeText(getContext(), R.string.msg_historico, Toast.LENGTH_LONG).show();
+        }
+
         //final TextView textView = (TextView) root.findViewById(R.id.text_gallery);
         //galleryViewModel.getText().observe(this, new Observer<String>() {
           //  @Override
@@ -54,15 +57,12 @@ public class GalleryFragment extends Fragment {
     }
 
     private ArrayList<Registro> getRegistros() {
-        ArrayList<Registro> registros = new ArrayList<>();
-
-        registros.add(new Registro(34, 112, 134, new Date()));
-        registros.add(new Registro(34, 112, 134, new Date()));
-        registros.add(new Registro(34, 112, 134, new Date()));
-        return registros;
+        RegistroRepository registroRepository = new RegistroRepository(getContext());
+        return registroRepository.buscarRegistros();
     }
 
-    private Registro criarRegistro(int consumo, double valorReal, double valorEstimado, Date data) {
-        return new Registro(consumo,valorEstimado,valorReal,data);
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
 }

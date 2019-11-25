@@ -11,8 +11,8 @@ public enum ValoresBlumenauEnum {
         this.valor = valor;
     }
 
-    public double getValor() {
-        return this.valor;
+    public float getValor() {
+        return (float) this.valor;
     }
 
 }
