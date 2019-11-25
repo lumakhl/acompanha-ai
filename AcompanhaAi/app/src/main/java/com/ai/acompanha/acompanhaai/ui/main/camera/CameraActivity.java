@@ -4,6 +4,8 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.ImageFormat;
 import android.graphics.SurfaceTexture;
 import android.hardware.camera2.CameraAccessException;
@@ -37,7 +39,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.ai.acompanha.acompanhaai.R;
+import com.ai.acompanha.acompanhaai.service.ProcessImageService;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -52,6 +56,42 @@ import java.util.List;
 
 public class CameraActivity extends AppCompatActivity {
 
+    private ProcessImageService imageService;
+
+    private Bitmap processCapturedImage(Bitmap data) {
+
+        Log.i(TAG, "bitmap: "+data);
+
+        int x = data.getWidth() / 2;
+        int y = data.getHeight() / 2;
+        int height = 150;
+        int width = 800;
+
+        Bitmap croppedImage = Bitmap.createBitmap(data, x, y, width, height);
+
+        imageService.process(croppedImage, this);
+
+        return croppedImage;
+    }
+
+    private Bitmap processCapturedImage(byte[] data) {
+
+        Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+
+        Log.i(TAG, "bitmap: "+data);
+
+        int x = bitmap.getWidth() / 2;
+        int y = bitmap.getHeight() / 2;
+        int height = 150;
+        int width = 800;
+
+        Bitmap croppedImage = Bitmap.createBitmap(bitmap, x, y, width, height);
+
+        imageService.process(croppedImage, this);
+
+        return croppedImage;
+    }
+
     private class ImageSaver implements Runnable {
 
         private final Image mImage;
@@ -65,6 +105,8 @@ public class CameraActivity extends AppCompatActivity {
             ByteBuffer byteBuffer = mImage.getPlanes()[0].getBuffer();
             byte[] bytes = new byte[byteBuffer.remaining()];
             byteBuffer.get(bytes);
+
+            processCapturedImage(bytes);
 
             FileOutputStream fileOutputStream = null;
             try {
@@ -86,6 +128,9 @@ public class CameraActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 }
+
+//                Bitmap bitmap = BitmapFactory.decodeFile(mImageFileName);
+//                processCapturedImage(bitmap);
             }
 
         }
@@ -215,6 +260,7 @@ public class CameraActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
 
+        imageService = imageService.getInstance();
         createImageFolder();
 
         mTextureView = findViewById(R.id.textureView);

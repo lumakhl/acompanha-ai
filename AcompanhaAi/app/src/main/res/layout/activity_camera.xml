@@ -7,31 +7,29 @@
     android:background="@color/black"
     tools:context="com.ai.acompanha.acompanhaai.ui.main.camera.CameraActivity">
 
-<!--    <TextureView-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:id="@+id/textureView"-->
-<!--        android:layout_alignParentTop="true"-->
-<!--        android:layout_alignParentStart="true" />-->
-
     <TextureView
-        android:layout_width="720px"
-        android:layout_height="280px"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:id="@+id/textureView"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        />
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
 
-<!--    <ImageButton-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:id="@+id/videoOnlineImageButton"-->
-<!--        android:contentDescription="Video Record Button"-->
-<!--        android:src="@mipmap/btn_video_online"-->
-<!--        android:layout_marginBottom="36dp"-->
-<!--        android:layout_alignParentBottom="true"-->
-<!--        android:layout_alignParentEnd="true"-->
-<!--        android:layout_marginEnd="49dp" />-->
+<!--    <TextureView-->
+<!--        android:layout_width="720px"-->
+<!--        android:layout_height="280px"-->
+<!--        android:id="@+id/textureView"-->
+<!--        android:layout_centerHorizontal="true"-->
+<!--        android:layout_centerVertical="true"-->
+<!--        />-->
+
+    <ImageView
+        android:id="@+id/rectimage"
+        android:layout_height="150px"
+        android:layout_width="800px"
+        android:src="@drawable/rectangle"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true">
+    </ImageView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:layout_width="wrap_content"
@@ -43,15 +41,5 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         />
-
-<!--    <Chronometer-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:id="@+id/chronometer"-->
-<!--        android:visibility="invisible"-->
-<!--        android:textColor="#ff0000"-->
-<!--        android:textSize="25dp"-->
-<!--        android:layout_above="@+id/videoOnlineImageButton"-->
-<!--        android:layout_alignStart="@+id/videoOnlineImageButton" />-->
 
 </RelativeLayout>
