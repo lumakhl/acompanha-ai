@@ -40,8 +40,8 @@ public class ConsumoDialog extends DialogFragment {
                 if (!txtConsumo.getText().toString().isEmpty()) {
 
                     int consumo = Integer.parseInt(txtConsumo.getText().toString());
-                    SharedUtils.setValor(getContext(), calculaService.calcularValor(SharedUtils.getConsumoAnterior(getContext()), consumo));
-                    SharedUtils.setConsumo(getContext(), calculaService.calculaConsumo(SharedUtils.getConsumoAnterior(getContext()), consumo));
+                    SharedUtils.setValor(getContext(), SharedUtils.getValor(getContext()) + calculaService.calcularValor(SharedUtils.getConsumoAnterior(getContext()), consumo));
+                    SharedUtils.setConsumo(getContext(), SharedUtils.getConsumo(getContext()) + calculaService.calculaConsumo(SharedUtils.getConsumoAnterior(getContext()), consumo));
                     SharedUtils.setConsumoAnterior(getContext(), consumo);
 
                 } else {

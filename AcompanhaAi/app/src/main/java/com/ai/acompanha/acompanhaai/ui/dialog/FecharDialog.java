@@ -122,6 +122,9 @@ public class FecharDialog extends DialogFragment {
                 registro.setPeriodo(date.getText().toString());
 
                 registroRepository.insert(registro);
+
+                SharedUtils.setConsumo(getContext(),0);
+                SharedUtils.setValor(getContext(), 0f);
             }
         });
 

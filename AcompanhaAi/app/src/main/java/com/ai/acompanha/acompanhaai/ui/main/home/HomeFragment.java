@@ -10,6 +10,8 @@ import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -42,6 +44,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 inflarDialogConsumo();
+                reload();
             }
         });
 
@@ -63,5 +66,11 @@ public class HomeFragment extends Fragment {
     private void inflarDialogConsumo() {
         DialogFragment consumoInicialDialog = new ConsumoDialog();
         consumoInicialDialog.show(getActivity().getSupportFragmentManager(), "ConsumoDialogFragment");
+    }
+
+    private void reload() {
+        Fragment frg = new HomeFragment();
+        FragmentManager fM = getActivity().getSupportFragmentManager();
+        fM.beginTransaction().replace(R.id.content_main, frg).commit();
     }
 }
