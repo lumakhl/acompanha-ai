@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.ImageFormat;
+import android.graphics.Matrix;
 import android.graphics.SurfaceTexture;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCaptureSession;
@@ -58,36 +59,23 @@ public class CameraActivity extends AppCompatActivity {
 
     private ProcessImageService imageService;
 
-    private Bitmap processCapturedImage(Bitmap data) {
+    private Bitmap processCapturedImage(byte[] data) {
 
-        Log.i(TAG, "bitmap: "+data);
-
-        int x = data.getWidth() / 2;
-        int y = data.getHeight() / 2;
         int height = 150;
         int width = 800;
-
-        Bitmap croppedImage = Bitmap.createBitmap(data, x, y, width, height);
-
-        imageService.process(croppedImage, this);
-
-        return croppedImage;
-    }
-
-    private Bitmap processCapturedImage(byte[] data) {
 
         Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
 
-        Log.i(TAG, "bitmap: "+data);
+        Matrix matrix = new Matrix();
+        matrix.postRotate(90);
+        Bitmap rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
 
-        int x = bitmap.getWidth() / 2;
-        int y = bitmap.getHeight() / 2;
-        int height = 150;
-        int width = 800;
+        int x = (rotatedBitmap.getWidth() / 2) - (width/2);
+        int y = (rotatedBitmap.getHeight() / 2) - (height/2);
 
-        Bitmap croppedImage = Bitmap.createBitmap(bitmap, x, y, width, height);
+        Bitmap croppedImage = Bitmap.createBitmap(rotatedBitmap, x, y, width, height);
 
-        imageService.process(croppedImage, this);
+        imageService.process(rotatedBitmap, this);
 
         return croppedImage;
     }
@@ -106,20 +94,26 @@ public class CameraActivity extends AppCompatActivity {
             byte[] bytes = new byte[byteBuffer.remaining()];
             byteBuffer.get(bytes);
 
-            processCapturedImage(bytes);
+            Bitmap bmp = processCapturedImage(bytes);
+
+            try (FileOutputStream out = new FileOutputStream(mImageFileName+".png")) {
+                bmp.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
             FileOutputStream fileOutputStream = null;
             try {
                 fileOutputStream = new FileOutputStream(mImageFileName);
-                fileOutputStream.write(bytes);
+//                fileOutputStream.write(bytes);
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {
                 mImage.close();
 
-                Intent mediaStoreUpdateIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-                mediaStoreUpdateIntent.setData(Uri.fromFile(new File(mImageFileName)));
-                sendBroadcast(mediaStoreUpdateIntent);
+//                Intent mediaStoreUpdateIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+//                mediaStoreUpdateIntent.setData(Uri.fromFile(new File(mImageFileName)));
+//                sendBroadcast(mediaStoreUpdateIntent);
 
                 if(fileOutputStream != null) {
                     try {
