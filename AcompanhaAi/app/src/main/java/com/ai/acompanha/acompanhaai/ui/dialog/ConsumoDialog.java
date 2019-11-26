@@ -13,12 +13,18 @@ import com.ai.acompanha.acompanhaai.R;
 import com.ai.acompanha.acompanhaai.data.shared.SharedUtils;
 import com.ai.acompanha.acompanhaai.service.BlumenauCalculoService;
 import com.ai.acompanha.acompanhaai.service.ProcessImageService;
+import com.ai.acompanha.acompanhaai.service.ReloadListner;
+import com.ai.acompanha.acompanhaai.ui.main.home.HomeFragment;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 public class ConsumoDialog extends DialogFragment {
+
+    private static ReloadListner reloadListner;
 
     @NonNull
     @Override
@@ -48,6 +54,9 @@ public class ConsumoDialog extends DialogFragment {
                     Toast.makeText(getContext(), R.string.msg_consumo_vazio, Toast.LENGTH_SHORT).show();
                 }
 
+                if (reloadListner != null) {
+                    reloadListner.onReload();
+                }
 
             }
         });
@@ -61,4 +70,24 @@ public class ConsumoDialog extends DialogFragment {
 
         return builder.create();
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        reload();
+    }
+
+    private void reload() {
+        Fragment frg = new HomeFragment();
+
+        FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.detach(frg);
+        fragmentTransaction.attach(frg);
+        fragmentTransaction.commit();
+    }
+
+    public void setOnReloadListner(ReloadListner listner) {
+        reloadListner = listner;
+    }
+
 }
