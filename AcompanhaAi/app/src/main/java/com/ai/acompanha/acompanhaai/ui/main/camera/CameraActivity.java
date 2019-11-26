@@ -2,7 +2,6 @@ package com.ai.acompanha.acompanhaai.ui.main.camera;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -21,13 +20,11 @@ import android.hardware.camera2.params.StreamConfigurationMap;
 import android.media.Image;
 import android.media.ImageReader;
 import android.media.MediaRecorder;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.Size;
 import android.util.SparseIntArray;
 import android.view.Surface;
@@ -42,7 +39,6 @@ import androidx.core.content.ContextCompat;
 import com.ai.acompanha.acompanhaai.R;
 import com.ai.acompanha.acompanhaai.service.ProcessImageService;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -62,7 +58,7 @@ public class CameraActivity extends AppCompatActivity {
     private Bitmap processCapturedImage(byte[] data) {
 
         int height = 150;
-        int width = 800;
+        int width = 700;
 
         Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
 
@@ -97,49 +93,20 @@ public class CameraActivity extends AppCompatActivity {
             Bitmap bmp = processCapturedImage(bytes);
 
             try (FileOutputStream out = new FileOutputStream(mImageFileName+".png")) {
-                bmp.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
+                bmp.compress(Bitmap.CompressFormat.PNG, 100, out);
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
-            FileOutputStream fileOutputStream = null;
-            try {
-                fileOutputStream = new FileOutputStream(mImageFileName);
-//                fileOutputStream.write(bytes);
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                mImage.close();
-
-//                Intent mediaStoreUpdateIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-//                mediaStoreUpdateIntent.setData(Uri.fromFile(new File(mImageFileName)));
-//                sendBroadcast(mediaStoreUpdateIntent);
-
-                if(fileOutputStream != null) {
-                    try {
-                        fileOutputStream.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-//                Bitmap bitmap = BitmapFactory.decodeFile(mImageFileName);
-//                processCapturedImage(bitmap);
-            }
-
         }
     }
 
     private static class CompareSizeByArea implements Comparator<Size> {
-
         @Override
         public int compare(Size lhs, Size rhs) {
             return Long.signum( (long)(lhs.getWidth() * lhs.getHeight()) -
                     (long)(rhs.getWidth() * rhs.getHeight()));
         }
     }
-
-    private static final String TAG = "CameraActivity";
 
     private static final int REQUEST_CAMERA_PERMISSION_RESULT = 0;
     private static final int REQUEST_WRITE_EXTERNAL_STORAGE_PERMISSION_RESULT = 1;
@@ -156,9 +123,7 @@ public class CameraActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
-
-        }
+        public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) { }
 
         @Override
         public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
@@ -166,10 +131,9 @@ public class CameraActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onSurfaceTextureUpdated(SurfaceTexture surface) {
-
-        }
+        public void onSurfaceTextureUpdated(SurfaceTexture surface) { }
     };
+
     private CameraDevice mCameraDevice;
     private CameraDevice.StateCallback mCameraDeviceStateCallback = new CameraDevice.StateCallback() {
         @Override
@@ -201,9 +165,9 @@ public class CameraActivity extends AppCompatActivity {
         ImageReader.OnImageAvailableListener() {
             @Override
             public void onImageAvailable(ImageReader reader) {
-                mBackgroundHandler.post(new ImageSaver(reader.acquireLatestImage()));
-            }
-        };
+        mBackgroundHandler.post(new ImageSaver(reader.acquireLatestImage()));
+        }
+    };
 
     private MediaRecorder mMediaRecorder;
     private int mTotalRotation;
@@ -225,7 +189,6 @@ public class CameraActivity extends AppCompatActivity {
             @Override
             public void onCaptureCompleted(CameraCaptureSession session, CaptureRequest request, TotalCaptureResult result) {
                 super.onCaptureCompleted(session, request, result);
-
                 process(result);
             }
         };
@@ -300,9 +263,7 @@ public class CameraActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         closeCamera();
-
         stopBackgroundThread();
-
         super.onPause();
     }
 

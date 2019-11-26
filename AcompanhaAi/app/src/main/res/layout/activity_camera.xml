@@ -14,18 +14,10 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true" />
 
-<!--    <TextureView-->
-<!--        android:layout_width="720px"-->
-<!--        android:layout_height="280px"-->
-<!--        android:id="@+id/textureView"-->
-<!--        android:layout_centerHorizontal="true"-->
-<!--        android:layout_centerVertical="true"-->
-<!--        />-->
-
     <ImageView
         android:id="@+id/rectimage"
         android:layout_height="150px"
-        android:layout_width="800px"
+        android:layout_width="700px"
         android:src="@drawable/rectangle"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true">
