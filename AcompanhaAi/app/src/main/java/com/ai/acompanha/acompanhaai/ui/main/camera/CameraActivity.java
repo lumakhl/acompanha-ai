@@ -31,6 +31,7 @@ import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -55,8 +56,7 @@ public class CameraActivity extends AppCompatActivity {
 
     private ProcessImageService imageService;
 
-    private Bitmap processCapturedImage(byte[] data) {
-
+    private Bitmap cropImage(byte[] data) {
         int height = 150;
         int width = 700;
 
@@ -70,12 +70,14 @@ public class CameraActivity extends AppCompatActivity {
         int y = (rotatedBitmap.getHeight() / 2) - (height/2);
 
         Bitmap croppedImage = Bitmap.createBitmap(rotatedBitmap, x, y, width, height);
-
-        imageService.process(rotatedBitmap, this);
-
         return croppedImage;
     }
 
+    private void processCapturedImage(Bitmap image) {
+        imageService.process(image, this);
+    }
+
+    private Bitmap mCroppedImage;
     private class ImageSaver implements Runnable {
 
         private final Image mImage;
@@ -86,19 +88,34 @@ public class CameraActivity extends AppCompatActivity {
 
         @Override
         public void run() {
-            ByteBuffer byteBuffer = mImage.getPlanes()[0].getBuffer();
-            byte[] bytes = new byte[byteBuffer.remaining()];
-            byteBuffer.get(bytes);
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    ByteBuffer byteBuffer = mImage.getPlanes()[0].getBuffer();
+                    byte[] bytes = new byte[byteBuffer.remaining()];
+                    byteBuffer.get(bytes);
 
-            Bitmap bmp = processCapturedImage(bytes);
-
-            try (FileOutputStream out = new FileOutputStream(mImageFileName+".png")) {
-                bmp.compress(Bitmap.CompressFormat.PNG, 100, out);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+                    mCroppedImage = cropImage(bytes);
+                    showImagePreview(mCroppedImage);
+                }
+            });
         }
     }
+
+    private void saveAndProcessImage() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                processCapturedImage(mCroppedImage);
+
+                try (FileOutputStream out = new FileOutputStream(mImageFileName+".png")) {
+                    mCroppedImage.compress(Bitmap.CompressFormat.PNG, 100, out);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    };
 
     private static class CompareSizeByArea implements Comparator<Size> {
         @Override
@@ -207,6 +224,29 @@ public class CameraActivity extends AppCompatActivity {
         ORIENTATIONS.append(Surface.ROTATION_270, 270);
     }
 
+    private ImageView mImagePreview;
+    private ImageButton mImageDeclineButton;
+    private ImageButton mImageAcceptButton;
+
+    private void showImagePreview(Bitmap imageBitmap) {
+        mStillImageButton.setVisibility(View.INVISIBLE);
+        mTextureView.setVisibility(View.INVISIBLE);
+
+        mImagePreview.setVisibility(View.VISIBLE);
+        mImagePreview.setImageBitmap(imageBitmap);
+        mImageDeclineButton.setVisibility(View.VISIBLE);
+        mImageAcceptButton.setVisibility(View.VISIBLE);
+    }
+
+    private void showImageCamera() {
+        mImagePreview.setVisibility(View.INVISIBLE);
+        mImageDeclineButton.setVisibility(View.INVISIBLE);
+        mImageAcceptButton.setVisibility(View.INVISIBLE);
+
+        mStillImageButton.setVisibility(View.VISIBLE);
+        mTextureView.setVisibility(View.VISIBLE);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -215,13 +255,33 @@ public class CameraActivity extends AppCompatActivity {
         imageService = imageService.getInstance();
         createImageFolder();
 
+        mImagePreview = findViewById(R.id.imagePreview);
+        mImageDeclineButton = findViewById(R.id.cameraImageDecline);
+        mImageAcceptButton = findViewById(R.id.cameraImageAccept);
+
         mTextureView = findViewById(R.id.textureView);
         mStillImageButton = findViewById(R.id.cameraImageButton2);
+
         mStillImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            checkWriteStoragePermission();
-            lockFocus();
+                checkWriteStoragePermission();
+                lockFocus();
+            }
+        });
+
+        mImageDeclineButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showImageCamera();
+            }
+        });
+
+        mImageAcceptButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveAndProcessImage();
+                showImageCamera();
             }
         });
     }

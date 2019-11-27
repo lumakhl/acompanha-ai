@@ -23,6 +23,29 @@
         android:layout_centerVertical="true">
     </ImageView>
 
+    <ImageView
+        android:id="@+id/imagePreview"
+        android:layout_width="700px"
+        android:layout_height="150px"
+        android:tint="@color/colorAccent"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:visibility="invisible">
+    </ImageView>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/cameraImageDecline"
+        android:layout_margin="@dimen/fab_margin"
+        app:backgroundTint="@color/gray"
+        android:src="@drawable/camera"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_toLeftOf="@id/cameraImageButton2"
+        android:visibility="invisible"
+        />
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -32,6 +55,18 @@
         android:src="@drawable/camera"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
+        />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/cameraImageAccept"
+        android:layout_margin="@dimen/fab_margin"
+        app:backgroundTint="@color/gray"
+        android:src="@drawable/camera"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@id/cameraImageButton2"
+        android:visibility="invisible"
         />
 
 </RelativeLayout>
