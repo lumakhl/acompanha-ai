@@ -274,6 +274,8 @@ public class CameraActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 showImageCamera();
+                finish();
+                startActivity(getIntent());
             }
         });
 
