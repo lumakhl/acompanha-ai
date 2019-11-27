@@ -39,6 +39,8 @@ import androidx.core.content.ContextCompat;
 
 import com.ai.acompanha.acompanhaai.R;
 import com.ai.acompanha.acompanhaai.service.ProcessImageService;
+import com.ai.acompanha.acompanhaai.service.ReloadListner;
+import com.ai.acompanha.acompanhaai.ui.dialog.ConsumoDialog;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -53,6 +55,7 @@ import java.util.Date;
 import java.util.List;
 
 public class CameraActivity extends AppCompatActivity {
+
 
     private ProcessImageService imageService;
 
@@ -74,7 +77,9 @@ public class CameraActivity extends AppCompatActivity {
     }
 
     private void processCapturedImage(Bitmap image) {
-        imageService.process(image, this);
+       String valor = imageService.process(image, this);
+       showBackBackground();
+       inflarDialogConsumo(valor);
     }
 
     private Bitmap mCroppedImage;
@@ -197,7 +202,7 @@ public class CameraActivity extends AppCompatActivity {
                     Integer afState = captureResult.get(CaptureResult.CONTROL_AF_STATE);
                     if(afState == CaptureResult.CONTROL_AF_STATE_FOCUSED_LOCKED ||
                             afState == CaptureResult.CONTROL_AF_STATE_NOT_FOCUSED_LOCKED) {
-                        Toast.makeText(getApplicationContext(), "Imagem capturada com sucesso.", Toast.LENGTH_SHORT).show();
+                      //  Toast.makeText(getApplicationContext(), "Imagem capturada com sucesso.", Toast.LENGTH_SHORT).show();
                         startStillCaptureRequest();
                     }
                 }
@@ -247,6 +252,15 @@ public class CameraActivity extends AppCompatActivity {
         mTextureView.setVisibility(View.VISIBLE);
     }
 
+    private void showBackBackground() {
+        mStillImageButton.setVisibility(View.INVISIBLE);
+        mTextureView.setVisibility(View.INVISIBLE);
+
+        mImagePreview.setVisibility(View.INVISIBLE);
+        mImageDeclineButton.setVisibility(View.INVISIBLE);
+        mImageAcceptButton.setVisibility(View.INVISIBLE);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -283,7 +297,6 @@ public class CameraActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 saveAndProcessImage();
-                showImageCamera();
             }
         });
     }
@@ -540,4 +553,16 @@ public class CameraActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
+    private void inflarDialogConsumo(String valor) {
+        ConsumoDialog consumoDialog = new ConsumoDialog(valor);
+        consumoDialog.setOnReloadListner(new ReloadListner() {
+            @Override
+            public void onReload() {
+                finish();
+            }
+        });
+        consumoDialog.show(getSupportFragmentManager(), "ConsumoDialogFragment");
+    }
+
 }

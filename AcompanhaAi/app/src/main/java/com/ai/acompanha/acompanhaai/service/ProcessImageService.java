@@ -14,6 +14,7 @@ import android.util.SparseIntArray;
 import android.view.Surface;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -35,6 +36,7 @@ import static android.content.Context.CAMERA_SERVICE;
 public class ProcessImageService {
 
     static ProcessImageService instance;
+    static String value;
 
     private ProcessImageService() {
     }
@@ -102,9 +104,7 @@ public class ProcessImageService {
 
     public String process(Bitmap img, final Context ctx) {
 
-        Toast.makeText(ctx, "Passou em processar a imagem", Toast.LENGTH_LONG).show();
-
-        final String texto = "";
+        String texto = "";
         FirebaseVisionImage image = FirebaseVisionImage.fromBitmap(img);
 
         // FirebaseVisionTextRecognizer detector = FirebaseVision.getInstance()
@@ -113,7 +113,7 @@ public class ProcessImageService {
         FirebaseVisionTextRecognizer detector = FirebaseVision.getInstance()
                 .getOnDeviceTextRecognizer();
 
-        Task<FirebaseVisionText> result =
+        final Task<FirebaseVisionText> result =
                 detector.processImage(image)
                         .addOnSuccessListener(new OnSuccessListener<FirebaseVisionText>() {
                             @Override
@@ -143,6 +143,7 @@ public class ProcessImageService {
                                     }
                                 }
                                 System.out.println(resultText);
+                                value = resultText;
                             }
                         })
                         .addOnFailureListener(
@@ -154,9 +155,24 @@ public class ProcessImageService {
                                         // Task failed with an exception
                                         // ...
                                     }
-                                });
-        return "";
-    }
+                                })
+                .addOnCompleteListener(new OnCompleteListener<FirebaseVisionText>() {
+                    @Override
+                    public void onComplete(@NonNull Task<FirebaseVisionText> task) {
+                        return ;
+                    }
+                });
 
+        result.addOnCompleteListener(new OnCompleteListener<FirebaseVisionText>() {
+            @Override
+            public void onComplete(@NonNull Task<FirebaseVisionText> task) {
+                value = result.getResult().getText();
+            }
+        });
+        while (!result.isComplete()){
+            //do nothing
+        }
+        return result.getResult().getText();
+    }
 
 }

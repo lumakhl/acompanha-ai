@@ -40,7 +40,7 @@
 
     <!-- Mensagens -->
     <string name="msg_consumo_inicial">
-        M³ do registro de sua ultima conta
+        m³ do registro de sua ultima conta
     </string>
     <string name="msg_cancel_inicial">
         É necessário valor inicial para iniciar os cálculos
@@ -49,7 +49,7 @@
         Ainda não existem dados para serem exibidos
     </string>
     <string name="msg_consumo">
-          M³ do registro de sua conta
+          m³ do registro de sua conta
     </string>
     <string name="msg_consumo_vazio">É necessário informar um novo valor para calcular</string>
 </resources>

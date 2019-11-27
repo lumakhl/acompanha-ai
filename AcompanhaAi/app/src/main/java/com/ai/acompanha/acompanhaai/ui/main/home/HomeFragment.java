@@ -58,6 +58,24 @@ public class HomeFragment extends Fragment {
         return root;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        reload();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        reload();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        reload();
+    }
+
     private void inflarDialogConsumoinicial() {
         DialogFragment consumoInicialDialog = new ConsumoInicialDialog();
         consumoInicialDialog.show(getActivity().getSupportFragmentManager(), "ConsumoInicialDialogFragment");

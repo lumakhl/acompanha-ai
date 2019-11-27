@@ -25,6 +25,15 @@ import androidx.fragment.app.FragmentTransaction;
 public class ConsumoDialog extends DialogFragment {
 
     private static ReloadListner reloadListner;
+    private String valorRelogio;
+
+    public ConsumoDialog(){
+
+    }
+
+    public ConsumoDialog(String valorRelogio) {
+        this.valorRelogio = valorRelogio;
+    }
 
     @NonNull
     @Override
@@ -38,6 +47,10 @@ public class ConsumoDialog extends DialogFragment {
         builder.setView(content);
 
         final EditText txtConsumo = content.findViewById(R.id.txt_consumo_manual);
+
+        if(valorRelogio != null) {
+            txtConsumo.setText(valorRelogio);
+        }
         builder.setTitle(R.string.fragment_consumo);
         builder.setPositiveButton(R.string.calcular, new DialogInterface.OnClickListener() {
             @Override
@@ -65,6 +78,10 @@ public class ConsumoDialog extends DialogFragment {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 Toast.makeText(getContext(), R.string.msg_consumo_vazio, Toast.LENGTH_SHORT).show();
+
+                if (reloadListner != null) {
+                    reloadListner.onReload();
+                }
             }
         });
 
