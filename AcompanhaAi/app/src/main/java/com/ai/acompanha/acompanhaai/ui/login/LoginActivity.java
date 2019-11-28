@@ -114,7 +114,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void criarUsuario(String username, String password) {
-        if (!(username.isEmpty() && password.isEmpty())) {
+        if (!username.isEmpty() && !password.isEmpty()) {
             mAuth.createUserWithEmailAndPassword(username,
                     password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                 @Override
@@ -140,7 +140,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void login(String username, String password) {
-        if (!(username.isEmpty() && password.isEmpty())) {
+        if (!username.isEmpty() && !password.isEmpty()) {
             mAuth.signInWithEmailAndPassword(username, password)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override

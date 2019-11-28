@@ -125,6 +125,7 @@ public class FecharDialog extends DialogFragment {
 
                 SharedUtils.setConsumo(getContext(),0);
                 SharedUtils.setValor(getContext(), 0f);
+                dismiss();
             }
         });
 

@@ -3,6 +3,7 @@ package com.ai.acompanha.acompanhaai.ui.main;
 import android.Manifest;
 import android.animation.Animator;
 import android.app.Activity;
+import android.content.ClipData;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -10,9 +11,11 @@ import android.os.Build;
 import android.os.Bundle;
 
 import com.ai.acompanha.acompanhaai.R;
+import com.ai.acompanha.acompanhaai.data.shared.SharedUtils;
 import com.ai.acompanha.acompanhaai.service.ProcessImageService;
 import com.ai.acompanha.acompanhaai.ui.dialog.ConsumoInicialDialog;
 import com.ai.acompanha.acompanhaai.ui.dialog.FecharDialog;
+import com.ai.acompanha.acompanhaai.ui.login.LoginActivity;
 import com.ai.acompanha.acompanhaai.ui.main.camera.CameraActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -53,8 +56,7 @@ public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private FloatingActionButton fab;
-    Button btnFechar;
-
+    private Button btnFechar;
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int CAMERA_REQUEST_CODE = 100;
@@ -88,6 +90,16 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+//        item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+//            @Override
+//            public boolean onMenuItemClick(MenuItem menuItem) {
+//                if(menuItem.getItemId() == R.id.action_settings){
+//                    Toast.makeText(getBaseContext(), "TESTE", Toast.LENGTH_SHORT).show();
+//                }
+//                return false;
+//            }
+//        });
 
         final DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -182,7 +194,16 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        if(item.getItemId() == R.id.action_settings){
+            SharedUtils.setLogado(getApplicationContext(), false);
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+
+        }
         return super.onOptionsItemSelected(item);
+
     }
 
     private void showButtons(boolean visible) {

@@ -58,10 +58,14 @@ public class ConsumoDialog extends DialogFragment {
 
                 if (!txtConsumo.getText().toString().isEmpty()) {
 
-                    int consumo = Integer.parseInt(txtConsumo.getText().toString());
-                    SharedUtils.setValor(getContext(), SharedUtils.getValor(getContext()) + calculaService.calcularValor(SharedUtils.getConsumoAnterior(getContext()), consumo));
-                    SharedUtils.setConsumo(getContext(), SharedUtils.getConsumo(getContext()) + calculaService.calculaConsumo(SharedUtils.getConsumoAnterior(getContext()), consumo));
-                    SharedUtils.setConsumoAnterior(getContext(), consumo);
+                    try {
+                        int consumo = Integer.parseInt(txtConsumo.getText().toString());
+                        SharedUtils.setValor(getContext(), SharedUtils.getValor(getContext()) + calculaService.calcularValor(SharedUtils.getConsumoAnterior(getContext()), consumo));
+                        SharedUtils.setConsumo(getContext(), SharedUtils.getConsumo(getContext()) + calculaService.calculaConsumo(SharedUtils.getConsumoAnterior(getContext()), consumo));
+                        SharedUtils.setConsumoAnterior(getContext(), consumo);
+                    } catch (Exception e) {
+                        Toast.makeText(getContext(), "Por favor informar apenas números", Toast.LENGTH_SHORT).show();
+                    }
 
                 } else {
                     Toast.makeText(getContext(), R.string.msg_consumo_vazio, Toast.LENGTH_SHORT).show();

@@ -10,7 +10,7 @@ public class ToolsViewModel extends ViewModel {
 
     public ToolsViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is tools fragment");
+        mText.setValue("Não temos nenhuma configuração disponível para sua localidade");
     }
 
     public LiveData<String> getText() {
